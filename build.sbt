@@ -1,3 +1,6 @@
+
+import ReleaseTransformations._
+
 name := "ascii-graphs"
 
 organization := "com.github.jlmauduy"
@@ -61,5 +64,20 @@ pomExtra := {
       </developer>
     </developers>
   }
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  ReleaseStep(action = Command.process("publishSigned", _)),
+  setNextVersion,
+  commitNextVersion,
+  ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+  pushChanges
+)
 
 // scalacOptions in (Compile, doc) += "-diagrams"
