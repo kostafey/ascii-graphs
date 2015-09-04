@@ -2,6 +2,8 @@ name := "ascii-graphs"
 
 organization := "com.github.jlmauduy"
 
+sonatypeProfileName := "jlmauduy"
+
 scalaVersion := "2.11.1"
 
 crossScalaVersions := Seq("2.10.1", "2.11.0", "2.11.1")
