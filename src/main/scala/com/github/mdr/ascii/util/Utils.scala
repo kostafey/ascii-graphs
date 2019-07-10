@@ -44,7 +44,7 @@ object Utils {
   }
 
   def makeMap[T, U](s: Iterable[T], f: T ⇒ U): Map[T, U] =
-    s.map(t ⇒ t -> f(t))(collection.breakOut)
+    s.map(t ⇒ t -> f(t)).to(Map)
 
   def signum(x: Int) = x match {
     case _ if x < 0 ⇒ -1

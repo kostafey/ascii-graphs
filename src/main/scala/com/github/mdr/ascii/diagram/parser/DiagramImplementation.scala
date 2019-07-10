@@ -3,6 +3,7 @@ package com.github.mdr.ascii.diagram.parser
 import com.github.mdr.ascii.diagram._
 import com.github.mdr.ascii.common._
 import scala.PartialFunction.cond
+import scala.language.postfixOps
 
 /**
  * Concrete implementations of Diagram types

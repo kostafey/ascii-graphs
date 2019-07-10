@@ -1,5 +1,7 @@
 package com.github.mdr.ascii.common
 
+import scala.language.postfixOps
+
 object Region {
 
   def apply(topLeft: Point, dimension: Dimension): Region = {

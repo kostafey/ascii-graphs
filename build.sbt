@@ -7,7 +7,7 @@ organization := "com.github.jlmauduy"
 
 sonatypeProfileName := "jlmauduy"
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.13.0"
 
 crossScalaVersions := Seq("2.10.1", "2.11.0", "2.11.1")
 
@@ -15,9 +15,9 @@ scalacOptions ++= Seq("-deprecation")
 
 javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.6" % "test"
-
-libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.11.4" % "test"
+//libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.6" % "test"
+//
+//libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.11.4" % "test"
 
 // Screen-sized dependency graph:
 // libraryDependencies += "org.vert-x" % "vertx-core" % "1.3.1.final"
