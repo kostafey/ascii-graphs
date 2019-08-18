@@ -6,7 +6,7 @@ version := "0.0.6"
 
 scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.11.8", "2.12.8")
+crossScalaVersions := Seq("2.10.7", "2.11.8", "2.12.8")
 
 scalacOptions ++= Seq("-deprecation")
 
@@ -15,16 +15,6 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.7" % "test"
 
 libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
-
-EclipseKeys.withSource := true
-
-EclipseKeys.eclipseOutput := Some("bin")
-
-import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-
-ScalariformKeys.preferences := baseDirectory { dir =>
-  scalariform.formatter.preferences.PreferencesImporterExporter.loadPreferences((dir / "formatterPreferences.properties").getPath)
-}.value
 
 //publishMavenStyle := true
 //
