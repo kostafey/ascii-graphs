@@ -1,6 +1,8 @@
+import xerial.sbt.Sonatype._
+
 name := "ascii-graphs"
 
-organization := "org.jetbrains"
+organization := "com.github.mutcianm"
 
 version := "0.0.6"
 
@@ -18,8 +20,8 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.7" % "test"
 
 libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
 
-publishMavenStyle := false
+publishMavenStyle := true
 
-bintrayRepository := "sbt-plugins"
+publishTo := sonatypePublishToBundle.value
 
-bintrayOrganization := Some("jetbrains")
+sonatypeProjectHosting := Some(GitHubHosting("mutcianm", "ascii-graphs", "mutcianko.m@gmail.com"))
