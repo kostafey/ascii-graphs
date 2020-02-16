@@ -14,7 +14,7 @@ object GraphUtils {
       val (n :: rest) = sources
       sources = rest
       sort ::= n
-      for (m ← g.outVertices(n) if !deletedEdges.contains((m, n))) {
+      for (m <- g.outVertices(n) if !deletedEdges.contains((m, n))) {
         deletedEdges += ((n, m))
         if (g.inEdges(m).filterNot(deletedEdges).isEmpty && !sources.contains(m) /* <- because multi-edges */ )
           sources ::= m

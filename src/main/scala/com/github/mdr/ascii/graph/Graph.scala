@@ -24,9 +24,9 @@ object Graph {
  */
 case class Graph[V](vertices: Set[V], edges: List[(V, V)]) {
 
-  val outMap: Map[V, List[V]] = edges.groupBy(_._1).map { case (k, vs) ⇒ (k, vs.map(_._2)) }
+  val outMap: Map[V, List[V]] = edges.groupBy(_._1).map { case (k, vs) => (k, vs.map(_._2)) }
 
-  val inMap: Map[V, List[V]] = edges.groupBy(_._2).map { case (k, vs) ⇒ (k, vs.map(_._1)) }
+  val inMap: Map[V, List[V]] = edges.groupBy(_._2).map { case (k, vs) => (k, vs.map(_._1)) }
 
   require(outMap.keys.forall(vertices.contains))
 
@@ -53,25 +53,25 @@ case class Graph[V](vertices: Set[V], edges: List[(V, V)]) {
   def removeEdge(edge: (V, V)): Graph[V] = copy(edges = Utils.removeFirst(edges, edge))
 
   def removeVertex(v: V): Graph[V] =
-    Graph(vertices.filterNot(_ == v), edges.filterNot { case (v1, v2) ⇒ v1 == v || v2 == v })
+    Graph(vertices.filterNot(_ == v), edges.filterNot { case (v1, v2) => v1 == v || v2 == v })
 
-  def map[U](f: V ⇒ U): Graph[U] =
-    Graph(vertices.map(f), edges.map { case (v1, v2) ⇒ (f(v1), f(v2)) })
+  def map[U](f: V => U): Graph[U] =
+    Graph(vertices.map(f), edges.map { case (v1, v2) => (f(v1), f(v2)) })
 
   override lazy val hashCode = vertices.## + edges.##
 
   override def equals(obj: Any): Boolean = cond(obj) {
-    case other: Graph[V] ⇒
+    case other: Graph[V] =>
       multisetCompare(vertices.toList, other.vertices.toList) &&
         multisetCompare(edges, other.edges)
   }
 
-  private def singletonVertices = vertices.filter(v ⇒ inDegree(v) == 0 && outDegree(v) == 0)
+  private def singletonVertices = vertices.filter(v => inDegree(v) == 0 && outDegree(v) == 0)
 
   private def asVertexList: String = {
     def render(v: V) = v.toString.replaceAll("\n", "\\\\n")
     singletonVertices.toList.map(render).sorted.mkString("\n") + "\n" +
-      edges.toList.sortBy(e ⇒ (render(e._1), render(e._2))).map(e ⇒ render(e._1) + "," + render(e._2)).mkString("\n")
+      edges.toList.sortBy(e => (render(e._1), render(e._2))).map(e => render(e._1) + "," + render(e._2)).mkString("\n")
   }
 
   override def toString =
@@ -79,7 +79,7 @@ case class Graph[V](vertices: Set[V], edges: List[(V, V)]) {
       val layoutPrefs = LayoutPrefsImpl(unicode = true, explicitAsciiBends = false)
       "\n" + GraphLayout.renderGraph(this, layoutPrefs = layoutPrefs) + "\n" + asVertexList
     } catch {
-      case t: Throwable ⇒ asVertexList
+      case t: Throwable => asVertexList
     }
 
 }

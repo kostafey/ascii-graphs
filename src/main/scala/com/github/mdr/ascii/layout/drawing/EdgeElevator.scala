@@ -29,18 +29,18 @@ object EdgeElevator {
     var currentDrawing = drawing
 
     val segmentInfos = for {
-      edgeElement ← drawing.edgeElements
-      triple @ (segment1, segment2, segment3) ← adjacentTriples(edgeElement.segments)
+      edgeElement <- drawing.edgeElements
+      triple @ (segment1, segment2, segment3) <- adjacentTriples(edgeElement.segments)
       if segment2.direction.isHorizontal
     } yield EdgeSegmentInfo(edgeElement, segment1, segment2, segment3)
 
     var segmentUpdates: Map[EdgeDrawingElement, List[(EdgeSegment, EdgeSegment)]] = Map()
     for {
-      segmentInfo ← segmentInfos.sortBy(_.row)
-      updatedEdgeSegment ← elevate(segmentInfo, edgeTracker)
-    } segmentUpdates = addToMultimap(segmentUpdates, segmentInfo.edgeElement, segmentInfo.segment2 → updatedEdgeSegment)
+      segmentInfo <- segmentInfos.sortBy(_.row)
+      updatedEdgeSegment <- elevate(segmentInfo, edgeTracker)
+    } segmentUpdates = addToMultimap(segmentUpdates, segmentInfo.edgeElement, segmentInfo.segment2 -> updatedEdgeSegment)
 
-    for ((edge, updates) ← segmentUpdates)
+    for ((edge, updates) <- segmentUpdates)
       currentDrawing = currentDrawing.replaceElement(edge, updateEdge(edge, updates))
 
     currentDrawing
@@ -49,8 +49,8 @@ object EdgeElevator {
   @tailrec
   private def updateEdge(edge: EdgeDrawingElement, updates: List[(EdgeSegment, EdgeSegment)]): EdgeDrawingElement =
     updates match {
-      case Nil                              ⇒ edge
-      case (oldSegment, newSegment) :: rest ⇒ updateEdge(edge.replaceSegment(oldSegment, newSegment), rest)
+      case Nil                              => edge
+      case (oldSegment, newSegment) :: rest => updateEdge(edge.replaceSegment(oldSegment, newSegment), rest)
     }
 
   private def elevate(segmentInfo: EdgeSegmentInfo, edgeTracker: EdgeTracker): Option[EdgeSegment] = {
@@ -58,8 +58,8 @@ object EdgeElevator {
     val firstRow = segmentInfo.segment1.start.row + 1 /* 2 */
     val lastRow = segmentInfo.segment2.start.row - 1
     for {
-      row ← firstRow to lastRow
-      segment ← elevate(row, segmentInfo, edgeTracker)
+      row <- firstRow to lastRow
+      segment <- elevate(row, segmentInfo, edgeTracker)
     } return Some(segment)
     None
   }

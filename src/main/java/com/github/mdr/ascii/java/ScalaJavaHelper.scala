@@ -1,7 +1,7 @@
 package com.github.mdr.ascii.java
 
-import java.{util ⇒ ju}
-import scala.collection.JavaConverters._
+import java.{util => ju}
+import scala.jdk.CollectionConverters._
 import com.github.mdr.ascii.graph.Graph
 import com.github.mdr.ascii.layout.GraphLayout
 import com.github.mdr.ascii.layout.coordAssign.ToStringVertexRenderingStrategy

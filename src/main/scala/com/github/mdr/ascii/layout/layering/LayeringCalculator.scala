@@ -29,7 +29,7 @@ class LayeringCalculator[V] {
     val layeringBuilder = new LayeringBuilder(maxLayerNum + 1)
 
     val realVertices: Map[V, RealVertex] = makeRealVertices(cycleRemovalResult)
-    for (v ← graph.vertices)
+    for (v <- graph.vertices)
       layeringBuilder.addVertex(layerNum(v), realVertices(v))
 
     val edges = addEdges(cycleRemovalResult, layerNum, layeringBuilder, realVertices)
@@ -42,48 +42,48 @@ class LayeringCalculator[V] {
 
     var edges: List[Edge] = Nil
 
-    def addVertex(layerNum: Int, v: Vertex) { layers(layerNum) += v }
+    def addVertex(layerNum: Int, v: Vertex): Unit = { layers(layerNum) += v }
 
-    def addEdge(edge: Edge) { edges ::= edge }
+    def addEdge(edge: Edge): Unit = { edges ::= edge }
 
-    def build = Layering(layers.toList.map(layer ⇒ Layer(layer.toList)), edges)
+    def build = Layering(layers.toList.map(layer => Layer(layer.toList)), edges)
   }
 
-  private def addEdges(cycleRemovalResult: CycleRemovalResult[V], layerNum: V ⇒ Int, layeringBuilder: LayeringBuilder,
-    realVertices: Map[V, RealVertex]) {
+  private def addEdges(cycleRemovalResult: CycleRemovalResult[V], layerNum: V => Int, layeringBuilder: LayeringBuilder,
+    realVertices: Map[V, RealVertex]): Unit = {
 
     // We decrement counts in revEdges as we construct layer edges to make sure the right number of reversed edges
     // are generated:
     var revEdges = Utils.mkMultiset(cycleRemovalResult.reversedEdges)
 
-    for (graphEdge @ (from, to) ← cycleRemovalResult.dag.edges) {
+    for (graphEdge @ (from, to) <- cycleRemovalResult.dag.edges) {
       val fromLayer = layerNum(from)
       val toLayer = layerNum(to)
-      val dummies = (fromLayer + 1) to (toLayer - 1) map { layerNum ⇒
+      val dummies = (fromLayer + 1) to (toLayer - 1) map { layerNum =>
         val dummy = new DummyVertex
         layeringBuilder.addVertex(layerNum, dummy)
         dummy
       }
       val vertexChain = realVertices(from) +: dummies :+ realVertices(to)
       val reversed = revEdges.get(graphEdge) match {
-        case Some(count) ⇒
+        case Some(count) =>
           if (count == 1)
             revEdges -= graphEdge
           else
-            revEdges += graphEdge → (count - 1)
+            revEdges += graphEdge -> (count - 1)
           true
-        case None ⇒
+        case None =>
           false
       }
-      for ((v1, v2) ← vertexChain.zip(vertexChain.tail))
+      for ((v1, v2) <- vertexChain.zip(vertexChain.tail))
         layeringBuilder.addEdge(new Edge(v1, v2, reversed))
     }
   }
 
   private def makeRealVertices(cycleRemovalResult: CycleRemovalResult[V]): Map[V, RealVertex] =
-    cycleRemovalResult.dag.vertices.map { v ⇒
+    cycleRemovalResult.dag.vertices.map { v =>
       val selfEdges = cycleRemovalResult.countSelfEdges(v)
-      v → new RealVertex(v, selfEdges)
+      v -> new RealVertex(v, selfEdges)
     }.toMap
 
 }

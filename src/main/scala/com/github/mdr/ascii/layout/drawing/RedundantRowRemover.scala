@@ -27,15 +27,15 @@ object RedundantRowRemover {
   def removeRedundantRows(drawing: Drawing): Drawing = iterate(drawing, removeRedundantRow)
 
   private def removeRedundantRow(drawing: Drawing): Option[Drawing] = {
-    for (row ← 0 until drawing.dimension.height if canRemove(drawing, row))
+    for (row <- 0 until drawing.dimension.height if canRemove(drawing, row))
       return Some(removeRows(drawing, row, row))
     None
   }
 
   private def canRemove(drawing: Drawing, row: Int): Boolean =
     drawing.elements.forall {
-      case ede: EdgeDrawingElement   ⇒ canRemove(ede, row)
-      case vde: VertexDrawingElement ⇒ row < vde.region.topRow || row > vde.region.bottomRow
+      case ede: EdgeDrawingElement   => canRemove(ede, row)
+      case vde: VertexDrawingElement => row < vde.region.topRow || row > vde.region.bottomRow
     }
 
   private def canRemove(ede: EdgeDrawingElement, row: Int): Boolean = {
@@ -59,12 +59,12 @@ object RedundantRowRemover {
   private def removeRows(drawing: Drawing, fromRow: Int, toRow: Int): Drawing = {
     val upShift = (toRow - fromRow + 1)
     val newElements = drawing.elements map {
-      case ede: EdgeDrawingElement ⇒
+      case ede: EdgeDrawingElement =>
         val newBendPoints = conditionallyMap(ede.bendPoints) {
-          case p if p.row >= fromRow ⇒ p.up(upShift)
+          case p if p.row >= fromRow => p.up(upShift)
         }
         ede.copy(bendPoints = newBendPoints)
-      case vde: VertexDrawingElement ⇒
+      case vde: VertexDrawingElement =>
         if (vde.region.topRow < fromRow)
           vde
         else

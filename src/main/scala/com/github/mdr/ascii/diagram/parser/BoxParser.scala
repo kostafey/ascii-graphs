@@ -14,18 +14,18 @@ import com.github.mdr.ascii.layout.drawing.BoxDrawingCharacters._
  *   +---+      ╰───╯
  *
  */
-trait BoxParser { self: DiagramParser ⇒
+trait BoxParser { self: DiagramParser =>
 
   protected def findAllBoxes: List[BoxImpl] =
     for {
-      topLeft ← possibleTopLefts
-      bottomRight ← completeBox(topLeft)
+      topLeft <- possibleTopLefts
+      bottomRight <- completeBox(topLeft)
     } yield new BoxImpl(topLeft, bottomRight)
 
   private def possibleTopLefts: List[Point] =
     for {
-      row ← (0 until numberOfRows - 1).toList
-      column ← 0 until numberOfColumns - 1
+      row <- (0 until numberOfRows - 1).toList
+      column <- 0 until numberOfColumns - 1
       point = Point(row, column)
       cornerChar = charAt(point)
       if isTopLeftCorner(cornerChar)
@@ -37,7 +37,7 @@ trait BoxParser { self: DiagramParser ⇒
     } yield point
 
   @tailrec
-  private def scanBoxEdge(p: Point, dir: Direction, isCorner: Char ⇒ Boolean, isEdge: Char ⇒ Boolean): Option[Point] =
+  private def scanBoxEdge(p: Point, dir: Direction, isCorner: Char => Boolean, isEdge: Char => Boolean): Option[Point] =
     if (inDiagram(p)) {
       val c = charAt(p)
       if (isCorner(c))
@@ -54,27 +54,27 @@ trait BoxParser { self: DiagramParser ⇒
    */
   private def completeBox(topLeft: Point): Option[Point] =
     for {
-      topRight ← scanBoxEdge(topLeft.right, Right, isTopRightCorner, isHorizontalBoxEdge)
-      bottomRight ← scanBoxEdge(topRight.down, Down, isBottomRightCorner, isVerticalBoxEdge)
-      bottomLeft ← scanBoxEdge(topLeft.down, Down, isBottomLeftCorner, isVerticalBoxEdge)
-      bottomRight2 ← scanBoxEdge(bottomLeft.right, Right, isBottomRightCorner, isHorizontalBoxEdge)
+      topRight <- scanBoxEdge(topLeft.right, Right, isTopRightCorner, isHorizontalBoxEdge)
+      bottomRight <- scanBoxEdge(topRight.down, Down, isBottomRightCorner, isVerticalBoxEdge)
+      bottomLeft <- scanBoxEdge(topLeft.down, Down, isBottomLeftCorner, isVerticalBoxEdge)
+      bottomRight2 <- scanBoxEdge(bottomLeft.right, Right, isBottomRightCorner, isHorizontalBoxEdge)
       if bottomRight == bottomRight2 // sanity check
     } yield bottomRight
 
-  private def isTopRightCorner(c: Char): Boolean = cond(c) { case '╗' | '╮' | '┐' | '+' ⇒ true }
+  private def isTopRightCorner(c: Char): Boolean = cond(c) { case '╗' | '╮' | '┐' | '+' => true }
 
-  private def isBottomRightCorner(c: Char): Boolean = cond(c) { case '╝' | '╯' | '┘' | '+' ⇒ true }
+  private def isBottomRightCorner(c: Char): Boolean = cond(c) { case '╝' | '╯' | '┘' | '+' => true }
 
-  private def isTopLeftCorner(c: Char): Boolean = cond(c) { case '╔' | '╭' | '┌' | '+' ⇒ true }
+  private def isTopLeftCorner(c: Char): Boolean = cond(c) { case '╔' | '╭' | '┌' | '+' => true }
 
-  private def isBottomLeftCorner(c: Char): Boolean = cond(c) { case '╚' | '╰' | '└' | '+' ⇒ true }
+  private def isBottomLeftCorner(c: Char): Boolean = cond(c) { case '╚' | '╰' | '└' | '+' => true }
 
   private def isHorizontalBoxEdge(c: Char): Boolean = cond(c) {
-    case '═' | '─' | '-' | '╤' | '┬' | '╧' | '┴' | '╪' | '┼' ⇒ true
+    case '═' | '─' | '-' | '╤' | '┬' | '╧' | '┴' | '╪' | '┼' => true
   }
 
   private def isVerticalBoxEdge(c: Char): Boolean = cond(c) {
-    case '║' | '│' | '|' | '╢' | '┤' | '╟' | '├' | '╫' | '┼' ⇒ true
+    case '║' | '│' | '|' | '╢' | '┤' | '╟' | '├' | '╫' | '┼' => true
   }
 
 }

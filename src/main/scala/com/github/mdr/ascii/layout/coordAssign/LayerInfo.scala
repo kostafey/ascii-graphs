@@ -27,7 +27,7 @@ case class LayerInfo(vertexInfos: Map[Vertex, VertexInfo]) extends Translatable[
     copy(vertexInfos = transformValues(vertexInfos)(_.translate(down, right)))
 
   def realVertexInfos: List[(RealVertex, VertexInfo)] = vertexInfos.toList.collect {
-    case (vertex: RealVertex, info) ⇒ (vertex, info)
+    case (vertex: RealVertex, info) => (vertex, info)
   }
 
 }

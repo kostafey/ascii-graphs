@@ -17,7 +17,7 @@ class EdgeTracker(drawing: Drawing) {
   /**
    * The (single cell) regions containing edge arrows.
    */
-  private val arrowRegions: List[Region] = drawing.edgeElements.map { edgeElement ⇒
+  private val arrowRegions: List[Region] = drawing.edgeElements.map { edgeElement =>
     if (edgeElement.hasArrow1)
       edgeElement.startPoint.region
     else
@@ -30,8 +30,8 @@ class EdgeTracker(drawing: Drawing) {
   vertexRegions.foreach(verticalQuadTree.add)
 
   for {
-    edge ← drawing.edgeElements
-    segment ← edge.segments
+    edge <- drawing.edgeElements
+    segment <- edge.segments
   } {
     if (segment.direction.isHorizontal)
       horizontalQuadTree.add(segment.region)
@@ -39,31 +39,31 @@ class EdgeTracker(drawing: Drawing) {
       verticalQuadTree.add(segment.region)
   }
 
-  def addEdgeSegments(segmentInfo: EdgeSegmentInfo) {
+  def addEdgeSegments(segmentInfo: EdgeSegmentInfo): Unit = {
     verticalQuadTree.add(segmentInfo.segment1.region)
     horizontalQuadTree.add(segmentInfo.segment2.region)
     verticalQuadTree.add(segmentInfo.segment3.region)
   }
 
-  def removeEdgeSegments(segmentInfo: EdgeSegmentInfo) {
+  def removeEdgeSegments(segmentInfo: EdgeSegmentInfo): Unit = {
     verticalQuadTree.remove(segmentInfo.segment1.region)
     horizontalQuadTree.remove(segmentInfo.segment2.region)
     verticalQuadTree.remove(segmentInfo.segment3.region)
   }
 
-  def addHorizontalSegment(edgeSegment: EdgeSegment) {
+  def addHorizontalSegment(edgeSegment: EdgeSegment): Unit = {
     horizontalQuadTree.add(edgeSegment.region)
   }
 
-  def addVerticalSegment(edgeSegment: EdgeSegment) {
+  def addVerticalSegment(edgeSegment: EdgeSegment): Unit = {
     verticalQuadTree.add(edgeSegment.region)
   }
 
-  def removeHorizontalSegment(edgeSegment: EdgeSegment) {
+  def removeHorizontalSegment(edgeSegment: EdgeSegment): Unit = {
     horizontalQuadTree.remove(edgeSegment.region)
   }
 
-  def removeVerticalSegment(edgeSegment: EdgeSegment) {
+  def removeVerticalSegment(edgeSegment: EdgeSegment): Unit = {
     verticalQuadTree.remove(edgeSegment.region)
   }
 
@@ -98,6 +98,8 @@ class EdgeTracker(drawing: Drawing) {
       collidesVertical(segmentInfo.segment2.region) && collidesHorizontal(segmentInfo.segment3.region)
 
   override def toString = {
-    horizontalQuadTree + "\n------------------------------------------------------------\n" + verticalQuadTree
+      horizontalQuadTree.toString +
+      "\n------------------------------------------------------------\n" +
+      verticalQuadTree
   }
 }

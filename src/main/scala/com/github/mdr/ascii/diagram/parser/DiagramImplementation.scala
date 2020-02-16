@@ -3,11 +3,12 @@ package com.github.mdr.ascii.diagram.parser
 import com.github.mdr.ascii.diagram._
 import com.github.mdr.ascii.common._
 import scala.PartialFunction.cond
+import scala.language.postfixOps
 
 /**
  * Concrete implementations of Diagram types
  */
-trait DiagramImplementation { self: DiagramParser ⇒
+trait DiagramImplementation { self: DiagramParser =>
 
   protected class DiagramImpl(numberOfRows: Int, numberOfColumns: Int) extends ContainerImpl with Diagram {
 
@@ -30,19 +31,19 @@ trait DiagramImplementation { self: DiagramParser ⇒
     val row = start.row
 
     def points: List[Point] =
-      for (column ← start.column to end.column toList)
+      for (column <- start.column to end.column toList)
         yield Point(row, column)
 
     val text: String = {
       val sb = new StringBuilder
-      for (column ← start.column + 1 to end.column - 1)
+      for (column <- start.column + 1 to end.column - 1)
         sb.append(charAt(Point(row, column)))
       sb.toString
     }
 
   }
 
-  protected abstract class ContainerImpl extends RegionToString { self: Container ⇒
+  protected abstract class ContainerImpl extends RegionToString { self: Container =>
 
     var text: String = ""
 
@@ -62,10 +63,10 @@ trait DiagramImplementation { self: DiagramParser ⇒
 
     def contentsRegion: Region = Region(topLeft.right.down, bottomRight.up.left)
 
-    val leftBoundary: List[Point] = for (row ← topLeft.row to bottomRight.row toList) yield Point(row, topLeft.column)
-    val rightBoundary: List[Point] = for (row ← topLeft.row to bottomRight.row toList) yield Point(row, bottomRight.column)
-    val topBoundary: List[Point] = for (column ← topLeft.column to bottomRight.column toList) yield Point(topLeft.row, column)
-    val bottomBoundary: List[Point] = for (column ← topLeft.column to bottomRight.column toList) yield Point(bottomRight.row, column)
+    val leftBoundary: List[Point] = for (row <- topLeft.row to bottomRight.row toList) yield Point(row, topLeft.column)
+    val rightBoundary: List[Point] = for (row <- topLeft.row to bottomRight.row toList) yield Point(row, bottomRight.column)
+    val topBoundary: List[Point] = for (column <- topLeft.column to bottomRight.column toList) yield Point(topLeft.row, column)
+    val bottomBoundary: List[Point] = for (column <- topLeft.column to bottomRight.column toList) yield Point(bottomRight.row, column)
 
     val boundaryPoints: Set[Point] = leftBoundary.toSet ++ rightBoundary.toSet ++ topBoundary.toSet ++ bottomBoundary.toSet
 
@@ -113,11 +114,11 @@ trait DiagramImplementation { self: DiagramParser ⇒
 
   }
 
-  private def diagramRegionToString(region: Region, includePoint: Point ⇒ Boolean = p ⇒ true) = {
+  private def diagramRegionToString(region: Region, includePoint: Point => Boolean = p => true) = {
     val sb = new StringBuilder("\n")
-    for (row ← region.topLeft.row to region.bottomRight.row) {
+    for (row <- region.topLeft.row to region.bottomRight.row) {
       for {
-        column ← region.topLeft.column to region.bottomRight.column
+        column <- region.topLeft.column to region.bottomRight.column
         point = Point(row, column)
         c = if (includePoint(point)) charAt(point) else ' '
       } sb.append(c)
@@ -127,7 +128,7 @@ trait DiagramImplementation { self: DiagramParser ⇒
   }
 
   private def isArrow(c: Char) = cond(c) {
-    case '^' | '<' | '>' | 'V' | 'v' ⇒ true
+    case '^' | '<' | '>' | 'V' | 'v' => true
   }
 
 }

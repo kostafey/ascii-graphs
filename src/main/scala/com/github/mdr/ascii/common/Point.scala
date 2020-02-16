@@ -7,9 +7,9 @@ object Point {
   private def colinear(p1: Point, p2: Point, p3: Point) = sameColumn(p1, p2, p3) || sameRow(p1, p2, p3)
 
   def removeRedundantPoints(points: List[Point]): List[Point] = points match {
-    case List() | List(_) | List(_, _)                       ⇒ points
-    case p1 :: p2 :: p3 :: remainder if colinear(p1, p2, p3) ⇒ removeRedundantPoints(p1 :: p3 :: remainder)
-    case p :: ps                                             ⇒ p :: removeRedundantPoints(ps)
+    case List() | List(_) | List(_, _)                       => points
+    case p1 :: p2 :: p3 :: remainder if colinear(p1, p2, p3) => removeRedundantPoints(p1 :: p3 :: remainder)
+    case p :: ps                                             => p :: removeRedundantPoints(ps)
   }
 
 }

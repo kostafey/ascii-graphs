@@ -29,7 +29,7 @@ class CycleRemovalInfo[V](graph: Graph[V]) {
   private var deletedVertices: Set[V] = Set()
 
   // Initialise
-  for (v ← graph.vertices)
+  for (v <- graph.vertices)
     addVertexToDegreeDiffMaps(v, graph.outDegree(v) - graph.inDegree(v))
 
   def getSources: Set[V] = sources
@@ -38,7 +38,7 @@ class CycleRemovalInfo[V](graph: Graph[V]) {
 
   def getLargestDegreeDiffVertex: Option[V] = degreeDiffToVertices.lastOption.flatMap(_._2.headOption)
 
-  def removeVertex(v: V) {
+  def removeVertex(v: V): Unit = {
     deletedVertices += v
     if (sinks contains v)
       sinks -= v
@@ -46,12 +46,12 @@ class CycleRemovalInfo[V](graph: Graph[V]) {
       sources -= v
     removeVertexFromDegreeDiffMaps(v)
 
-    for (outVertex ← getOutVertices(v)) {
+    for (outVertex <- getOutVertices(v)) {
       adjustDegreeDiff(outVertex, +1)
       if (getInVertices(outVertex).isEmpty)
         sources += outVertex
     }
-    for (inVertex ← getInVertices(v)) {
+    for (inVertex <- getInVertices(v)) {
       adjustDegreeDiff(inVertex, -1)
       if (getOutVertices(inVertex).isEmpty)
         sinks += inVertex
@@ -68,8 +68,8 @@ class CycleRemovalInfo[V](graph: Graph[V]) {
   }
 
   private def addVertexToDegreeDiffMaps(v: V, degreeDiff: Int) = {
-    degreeDiffToVertices += degreeDiff → (v :: degreeDiffToVertices.getOrElse(degreeDiff, Nil))
-    verticesToDegreeDiff += v → degreeDiff
+    degreeDiffToVertices += degreeDiff -> (v :: degreeDiffToVertices.getOrElse(degreeDiff, Nil))
+    verticesToDegreeDiff += v -> degreeDiff
   }
 
   private def removeVertexFromDegreeDiffMaps(v: V): Int = {
@@ -79,7 +79,7 @@ class CycleRemovalInfo[V](graph: Graph[V]) {
     if (updatedVertices.isEmpty)
       degreeDiffToVertices -= degreeDiff
     else
-      degreeDiffToVertices += degreeDiff → updatedVertices
+      degreeDiffToVertices += degreeDiff -> updatedVertices
     verticesToDegreeDiff -= v
     degreeDiff
   }

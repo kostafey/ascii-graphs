@@ -7,7 +7,7 @@ import com.github.mdr.ascii.common.Characters._
 import com.github.mdr.ascii.common.Direction._
 import scala.PartialFunction.cond
 
-trait AsciiEdgeParser { self: DiagramParser ⇒
+trait AsciiEdgeParser { self: DiagramParser =>
 
   @tailrec
   protected final def followAsciiEdge(points: List[Point], direction: Direction): Option[EdgeImpl] = {
@@ -62,14 +62,14 @@ trait AsciiEdgeParser { self: DiagramParser ⇒
   }
 
   private def isContinuation(point: Point, direction: Direction): Boolean =
-    isBoxEdge(point) || charAtOpt(point).exists { c ⇒
+    isBoxEdge(point) || charAtOpt(point).exists { c =>
       isStraightAhead(c, direction) || isCrossing(c) || isAheadArrow(c, direction) ||
         isLeftTurn(c, direction) || isRightTurn(c, direction)
     }
 
   private def isStraightAhead(c: Char, direction: Direction): Boolean = cond(c, direction) {
-    case ('-', Right | Left) ⇒ true
-    case ('|', Up | Down)    ⇒ true
+    case ('-', Right | Left) => true
+    case ('|', Up | Down)    => true
   }
 
   private def isOrthogonal(c: Char, direction: Direction): Boolean = isStraightAhead(c, direction.turnRight)
@@ -81,8 +81,8 @@ trait AsciiEdgeParser { self: DiagramParser ⇒
   private def isTurn(c: Char): Boolean = c == '\\' || c == '/'
 
   private def isRightTurn(c: Char, direction: Direction): Boolean = cond(c, direction) {
-    case ('\\', Left | Right) ⇒ true
-    case ('/', Up | Down)     ⇒ true
+    case ('\\', Left | Right) => true
+    case ('/', Up | Down)     => true
   }
 
   private def isLeftTurn(c: Char, direction: Direction): Boolean = isRightTurn(c, direction.turnRight)

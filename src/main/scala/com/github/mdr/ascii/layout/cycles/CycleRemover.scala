@@ -34,25 +34,25 @@ class CycleRemover[V] {
       addSourcesToLeft()
 
       graphInfo.getLargestDegreeDiffVertex match {
-        case Some(v) ⇒
+        case Some(v) =>
           graphInfo.removeVertex(v)
           left ::= v
           run()
-        case None ⇒
+        case None =>
           this
       }
     }
 
     private def addSinksToRight() =
       while (graphInfo.getSinks.nonEmpty)
-        for (v ← graphInfo.getSinks) {
+        for (v <- graphInfo.getSinks) {
           graphInfo.removeVertex(v)
           right ::= v
         }
 
     private def addSourcesToLeft() =
       while (graphInfo.getSources.nonEmpty)
-        for (v ← graphInfo.getSources) {
+        for (v <- graphInfo.getSources) {
           graphInfo.removeVertex(v)
           left ::= v
         }
@@ -92,7 +92,7 @@ class CycleRemover[V] {
     var newEdges: List[(V, V)] = Nil
     var reversedEdges: List[(V, V)] = Nil
     for {
-      (source, target) ← graph.edges
+      (source, target) <- graph.edges
       sourceIndex = vertexIndexMap(source)
       targetIndex = vertexIndexMap(target)
     } if (targetIndex < sourceIndex) {

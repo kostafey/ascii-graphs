@@ -22,10 +22,10 @@ trait Translatable[+Self] {
   def right(n: Int): Self = translate(right = n)
 
   def go(direction: Direction) = direction match {
-    case Up    ⇒ up
-    case Down  ⇒ down
-    case Left  ⇒ left
-    case Right ⇒ right
+    case Up    => up
+    case Down  => down
+    case Left  => left
+    case Right => right
   }
 
 }

@@ -12,9 +12,9 @@ trait Box extends Container {
    */
   def connections(edgeType: EdgeType = EdgeType.All): List[(Edge, Box)] =
     for {
-      edge ← edges
+      edge <- edges
       if edgeType.includeEdge(edge, this)
       otherBox = edge.otherBox(this)
-    } yield edge → otherBox
+    } yield edge -> otherBox
 
 }

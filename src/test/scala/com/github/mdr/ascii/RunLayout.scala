@@ -156,7 +156,7 @@ object RunLayout extends App {
   // println(rendered)
   println(GraphLayout.renderGraph(graph))
   if (true)
-    for (n ← 1 to 4000) {
+    for (n <- 1 to 4000) {
       val seed = new Random().nextInt
       println(seed + ": ")
       println(GraphLayout.renderGraph(RandomGraph.randomGraph(new Random(seed))))

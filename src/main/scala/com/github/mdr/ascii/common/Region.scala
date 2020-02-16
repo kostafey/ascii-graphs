@@ -1,5 +1,7 @@
 package com.github.mdr.ascii.common
 
+import scala.language.postfixOps
+
 object Region {
 
   def apply(topLeft: Point, dimension: Dimension): Region = {
@@ -57,8 +59,8 @@ case class Region(topLeft: Point, bottomRight: Point) extends Translatable[Regio
 
   def points: List[Point] =
     for {
-      row ← (topRow to bottomRow toList)
-      column ← leftColumn to rightColumn
+      row <- (topRow to bottomRow toList)
+      column <- leftColumn to rightColumn
     } yield Point(row, column)
 
   def translate(down: Int = 0, right: Int = 0): Region =

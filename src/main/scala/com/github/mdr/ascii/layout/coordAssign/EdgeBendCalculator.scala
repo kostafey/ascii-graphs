@@ -8,7 +8,7 @@ import com.github.mdr.ascii.util.Utils._
 class EdgeBendCalculator(edgeInfos: List[EdgeInfo], edgeZoneTopRow: Int, selfEdgeBuffer: Int) {
 
   private val edgeRows: Map[EdgeInfo, Int] = orderEdgeBends(edgeInfos)
-  require(edgeInfos.forall { edge ⇒ edge.isStraight || edgeRows.contains(edge) })
+  require(edgeInfos.forall { edge => edge.isStraight || edgeRows.contains(edge) })
 
   private def bendRow(rowIndex: Int) = edgeZoneTopRow + rowIndex * 1 + 1
 
@@ -80,8 +80,8 @@ class EdgeBendCalculator(edgeInfos: List[EdgeInfo], edgeZoneTopRow: Int, selfEdg
     while (continue) {
       continue = false
       for {
-        edgeInfo1 @ EdgeInfo(_, _, start1, finish1, _) ← edgeToRowMap.keys
-        edgeInfo2 @ EdgeInfo(_, _, start2, finish2, _) ← edgeToRowMap.keys
+        edgeInfo1 @ EdgeInfo(_, _, start1, finish1, _) <- edgeToRowMap.keys
+        edgeInfo2 @ EdgeInfo(_, _, start2, finish2, _) <- edgeToRowMap.keys
         if edgeInfo1 != edgeInfo2
         if start1.column == finish2.column
         if start2.column != finish1.column // Prevents an infinite loop (issue #3)
@@ -90,8 +90,8 @@ class EdgeBendCalculator(edgeInfos: List[EdgeInfo], edgeZoneTopRow: Int, selfEdg
         if row1 > row2
         if !swappedEdges.contains((edgeInfo1, edgeInfo2)) // Prevents more involved infinite loops
       } {
-        updatedEdgeToRowMap += edgeInfo1 → row2
-        updatedEdgeToRowMap += edgeInfo2 → row1
+        updatedEdgeToRowMap += edgeInfo1 -> row2
+        updatedEdgeToRowMap += edgeInfo2 -> row1
         swappedEdges += ((edgeInfo1, edgeInfo2))
         continue = true
       }

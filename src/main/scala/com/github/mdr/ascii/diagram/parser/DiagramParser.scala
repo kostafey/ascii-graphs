@@ -31,29 +31,29 @@ class DiagramParser(s: String)
 
   private val boxContains: Map[BoxImpl, BoxImpl] =
     (for {
-      outerBox ← diagram.allBoxes
-      innerBox ← diagram.allBoxes
+      outerBox <- diagram.allBoxes
+      innerBox <- diagram.allBoxes
       if outerBox != innerBox
       if outerBox.region contains innerBox.region
-    } yield outerBox → innerBox).toMap
+    } yield outerBox -> innerBox).toMap
 
   for {
-    (box, containingBoxMap) ← boxContains.groupBy(_._2)
+    (box, containingBoxMap) <- boxContains.groupBy(_._2)
     containingBoxes = box :: containingBoxMap.keys.toList
     orderedBoxes = containingBoxes.sortBy(_.region.area)
-    (childBox, parentBox) ← orderedBoxes.zip(orderedBoxes drop 1)
+    (childBox, parentBox) <- orderedBoxes.zip(orderedBoxes drop 1)
   } {
     childBox.parent = Some(parentBox)
     parentBox.childBoxes ::= childBox
   }
 
-  for (box ← diagram.allBoxes if box.parent.isEmpty) {
+  for (box <- diagram.allBoxes if box.parent.isEmpty) {
     diagram.childBoxes ::= box
     box.parent = Some(diagram)
   }
 
   private val edges =
-    diagram.allBoxes.flatMap { box ⇒
+    diagram.allBoxes.flatMap { box =>
       box.rightBoundary.flatMap(followEdge(Right, _)) ++
         box.leftBoundary.flatMap(followEdge(Left, _)) ++
         box.topBoundary.flatMap(followEdge(Up, _)) ++
@@ -64,7 +64,7 @@ class DiagramParser(s: String)
   diagram.allEdges = edges.groupBy(_.points.toSet).values.toList.map(_.head)
 
   // Wire up edges to boxes:
-  for (edge ← diagram.allEdges) {
+  for (edge <- diagram.allEdges) {
     edge.box1.edges ::= edge
     if (edge.box1 != edge.box2)
       edge.box2.edges ::= edge
@@ -74,15 +74,15 @@ class DiagramParser(s: String)
 
   private lazy val allLabelPoints: Set[Point] =
     (for {
-      edge ← diagram.allEdges
-      label ← edge.label_.toList
-      point ← label.points
+      edge <- diagram.allEdges
+      label <- edge.label_.toList
+      point <- label.points
     } yield point).toSet
 
-  for (edge ← diagram.allEdges)
+  for (edge <- diagram.allEdges)
     edge.label_ = getLabel(edge)
 
-  for (box ← diagram.allBoxes)
+  for (box <- diagram.allBoxes)
     box.text = collectText(box)
   diagram.text = collectText(diagram)
 
@@ -115,9 +115,9 @@ class DiagramParser(s: String)
 
     val sb = new StringBuilder
     val region = container.contentsRegion
-    for (row ← region.topLeft.row to region.bottomRight.row) {
+    for (row <- region.topLeft.row to region.bottomRight.row) {
       for {
-        column ← region.topLeft.column to region.bottomRight.column
+        column <- region.topLeft.column to region.bottomRight.column
         point = Point(row, column)
         if !childBoxPoints.contains(point)
         if !allEdgePoints.contains(point)

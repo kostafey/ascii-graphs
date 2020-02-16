@@ -31,29 +31,29 @@ object PortNudger {
 
   def nudge(layering: Layering, layerInfos: Map[Layer, LayerInfo]): Map[Layer, LayerInfo] = {
     var updatedLayerInfos = layerInfos
-    for ((previousLayerOpt, currentLayer) ← Utils.withPrevious(layering.layers)) yield {
+    for ((previousLayerOpt, currentLayer) <- Utils.withPrevious(layering.layers)) yield {
       // Necessary to use use the updatedLayerInfos as we may have nudged edges in the previous layer
       val previousLayerInfoOpt = previousLayerOpt.map(updatedLayerInfos)
       val currentLayerInfo = layerInfos(currentLayer)
       val updatedLayerInfo = nudgeLayer(previousLayerInfoOpt, currentLayerInfo)
-      updatedLayerInfos += currentLayer → updatedLayerInfo
+      updatedLayerInfos += currentLayer -> updatedLayerInfo
     }
     updatedLayerInfos
   }
 
   private def getOutEdgeColumns(previousLayerInfoOpt: Option[LayerInfo]): List[Int] =
     for {
-      previousLayerInfo ← previousLayerInfoOpt.toList
-      vertexInfo ← previousLayerInfo.vertexInfos.values
-      outPort ← vertexInfo.outEdgeToPortMap.values
+      previousLayerInfo <- previousLayerInfoOpt.toList
+      vertexInfo <- previousLayerInfo.vertexInfos.values
+      outPort <- vertexInfo.outEdgeToPortMap.values
     } yield outPort.column
 
   private def nudgeLayer(previousLayerInfoOpt: Option[LayerInfo], currentLayerInfo: LayerInfo): LayerInfo = {
     val previousEdgeColumns: Set[Int] = getOutEdgeColumns(previousLayerInfoOpt).toSet
 
     val newVertexInfos = currentLayerInfo.vertexInfos.map {
-      case (vertex, vertexInfo) ⇒
-        vertex → nudgeVertexInfo(vertex, vertexInfo, previousLayerInfoOpt, previousEdgeColumns)
+      case (vertex, vertexInfo) =>
+        vertex -> nudgeVertexInfo(vertex, vertexInfo, previousLayerInfoOpt, previousEdgeColumns)
     }
     currentLayerInfo.copy(vertexInfos = newVertexInfos)
   }
@@ -65,19 +65,19 @@ object PortNudger {
     var nudgedColumns: Set[Int] = Set()
 
     val newInEdgeToPortMap = vertexInfo.inEdgeToPortMap.map {
-      case (edge, port) if shouldNudge(edge, port) ⇒
+      case (edge, port) if shouldNudge(edge, port) =>
         nudgedColumns += port.column
-        edge → port.right
-      case pair ⇒ pair
+        edge -> port.right
+      case pair => pair
     }
 
     // We need to also nudge the out ports for dummy vertices we nudged earlier
     val newOutEdgeToPortMap = vertex match {
-      case _: DummyVertex ⇒ vertexInfo.outEdgeToPortMap.map {
-        case (edge, port) if nudgedColumns contains port.column ⇒ edge → port.right
-        case pair                                               ⇒ pair
+      case _: DummyVertex => vertexInfo.outEdgeToPortMap.map {
+        case (edge, port) if nudgedColumns contains port.column => edge -> port.right
+        case pair                                               => pair
       }
-      case _: RealVertex ⇒ vertexInfo.outEdgeToPortMap
+      case _: RealVertex => vertexInfo.outEdgeToPortMap
     }
 
     vertexInfo.copy(inEdgeToPortMap = newInEdgeToPortMap, outEdgeToPortMap = newOutEdgeToPortMap)
@@ -86,8 +86,8 @@ object PortNudger {
   private def isStraight(edge: Edge, vertexInfo: VertexInfo, previousLayerInfoOpt: Option[LayerInfo]) = {
     val column1: Option[Int] =
       for {
-        previousLayerInfo ← previousLayerInfoOpt
-        previousVertexInfo ← previousLayerInfo.vertexInfo(edge.startVertex)
+        previousLayerInfo <- previousLayerInfoOpt
+        previousVertexInfo <- previousLayerInfo.vertexInfo(edge.startVertex)
         outPort = previousVertexInfo.outEdgeToPortMap(edge)
       } yield outPort.column
 

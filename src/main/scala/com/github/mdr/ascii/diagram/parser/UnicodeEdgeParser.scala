@@ -10,7 +10,7 @@ import scala.PartialFunction.cond
 /**
  * Follow an edge drawn using Unicode box-drawing characters.
  */
-trait UnicodeEdgeParser { self: DiagramParser ⇒
+trait UnicodeEdgeParser { self: DiagramParser =>
 
   /**
    * @param points -- non-empty list of points in the edge so far, in reverse order
@@ -36,17 +36,17 @@ trait UnicodeEdgeParser { self: DiagramParser ⇒
   }
 
   protected def isEdgeStart(c: Char, direction: Direction): Boolean = cond(c, direction) {
-    case ('╤' | '┬', Down)         ⇒ true
-    case ('╪' | '┼', Up | Down)    ⇒ true
-    case ('╧' | '┴', Up)           ⇒ true
-    case ('╟' | '├', Right)        ⇒ true
-    case ('╫' | '┼', Right | Left) ⇒ true
-    case ('╢' | '┤', Left)         ⇒ true
+    case ('╤' | '┬', Down)         => true
+    case ('╪' | '┼', Up | Down)    => true
+    case ('╧' | '┴', Up)           => true
+    case ('╟' | '├', Right)        => true
+    case ('╫' | '┼', Right | Left) => true
+    case ('╢' | '┤', Left)         => true
   }
 
   private def isStraightAhead(c: Char, direction: Direction): Boolean = cond(c, direction) {
-    case ('─', Right | Left) ⇒ true
-    case ('│', Up | Down)    ⇒ true
+    case ('─', Right | Left) => true
+    case ('│', Up | Down)    => true
   }
 
   private def isLeftArrow(c: Char, direction: Direction) = isAheadArrow(c, direction.turnLeft)
@@ -54,17 +54,17 @@ trait UnicodeEdgeParser { self: DiagramParser ⇒
   private def isRightArrow(c: Char, direction: Direction) = isAheadArrow(c, direction.turnRight)
 
   private def isAheadArrow(c: Char, direction: Direction): Boolean = cond(c, direction) {
-    case ('^', Up)         ⇒ true
-    case ('v' | 'V', Down) ⇒ true
-    case ('<', Left)       ⇒ true
-    case ('>', Right)      ⇒ true
+    case ('^', Up)         => true
+    case ('v' | 'V', Down) => true
+    case ('<', Left)       => true
+    case ('>', Right)      => true
   }
 
   private def isRightTurn(c: Char, direction: Direction): Boolean = cond(c, direction) {
-    case ('╮' | '┐', Right) ⇒ true
-    case ('╯' | '┘', Down)  ⇒ true
-    case ('╭' | '┌', Up)    ⇒ true
-    case ('╰' | '└', Left)  ⇒ true
+    case ('╮' | '┐', Right) => true
+    case ('╯' | '┘', Down)  => true
+    case ('╭' | '┌', Up)    => true
+    case ('╰' | '└', Left)  => true
   }
 
   private def isLeftTurn(c: Char, direction: Direction): Boolean = isRightTurn(c, direction.turnRight)

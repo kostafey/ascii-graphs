@@ -17,8 +17,9 @@ class Grid(dimension: Dimension) {
     try
       chars(point.row)(point.column)
     catch {
-      case e: ArrayIndexOutOfBoundsException ⇒
-        throw new ArrayIndexOutOfBoundsException(point + " is not in " + dimension)
+      case e: ArrayIndexOutOfBoundsException =>
+            throw new ArrayIndexOutOfBoundsException(
+                point.toString + " is not in " + dimension)
     }
 
   def update(point: Point, char: Char) =
@@ -27,9 +28,9 @@ class Grid(dimension: Dimension) {
   /**
    * Write a string into the grid starting at the given point.
    */
-  def update(point: Point, s: String) {
+  def update(point: Point, s: String): Unit = {
     var p = point
-    for (c ← s) {
+    for (c <- s) {
       this(p) = c
       p = p.right
     }

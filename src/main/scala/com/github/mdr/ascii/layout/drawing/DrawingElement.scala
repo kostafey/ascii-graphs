@@ -79,7 +79,7 @@ case class EdgeDrawingElement(
   }
 
   lazy val segments: List[EdgeSegment] =
-    for ((point1, point2) ← Utils.adjacentPairs(bendPoints))
+    for ((point1, point2) <- Utils.adjacentPairs(bendPoints))
       yield EdgeSegment(point1, direction(point1, point2), point2)
 
   def transpose: EdgeDrawingElement = copy(bendPoints = bendPoints.map(_.transpose))

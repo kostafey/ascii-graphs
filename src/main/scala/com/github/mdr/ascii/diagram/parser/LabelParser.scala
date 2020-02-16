@@ -5,15 +5,15 @@ import com.github.mdr.ascii.common.Point
 import com.github.mdr.ascii.common.Direction
 import com.github.mdr.ascii.common.Direction._
 
-trait LabelParser { self: DiagramParser ⇒
+trait LabelParser { self: DiagramParser =>
 
   protected def getLabel(edge: EdgeImpl): Option[Label] = {
     val labels =
       for {
-        point ← edge.points
-        startPoint ← point.neighbours
-        ('[' | ']') ← charAtOpt(startPoint)
-        label ← completeLabel(startPoint, edge.parent)
+        point <- edge.points
+        startPoint <- point.neighbours
+        ('[' | ']') <- charAtOpt(startPoint)
+        label <- completeLabel(startPoint, edge.parent)
       } yield label
     if (labels.distinct.size > 1)
       throw new DiagramParserException("Multiple labels for edge " + edge + ", " + labels.distinct.map(_.text).mkString(","))
@@ -25,17 +25,17 @@ trait LabelParser { self: DiagramParser ⇒
     val childBoxPoints = parent.childBoxes.flatMap(_.region.points).toSet
     val occupiedPoints = childBoxPoints ++ allEdgePoints
     val (finalChar, direction) = charAt(startPoint) match {
-      case '[' ⇒ (']', Right)
-      case ']' ⇒ ('[', Left)
+      case '[' => (']', Right)
+      case ']' => ('[', Left)
     }
 
     def search(point: Point): Option[Label] = charAtOpt(point) flatMap {
-      case `finalChar` ⇒
+      case `finalChar` =>
         val List(p1, p2) = List(startPoint, point).sortBy(_.column)
         Some(Label(p1, p2))
-      case _ if occupiedPoints.contains(point) ⇒
+      case _ if occupiedPoints.contains(point) =>
         None
-      case _ ⇒
+      case _ =>
         search(point.go(direction))
     }
 

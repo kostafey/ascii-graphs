@@ -24,18 +24,18 @@ class OccupancyGrid(drawing: Drawing) {
 
   private def remove(element: DrawingElement) = adjust(element, -1)
 
-  def replace(element1: DrawingElement, element2: DrawingElement) {
+  def replace(element1: DrawingElement, element2: DrawingElement): Unit = {
     remove(element1)
     add(element2)
   }
 
   private def adjust(drawingElement: DrawingElement, delta: Int) =
     for {
-      point ← drawingElement.points
+      point <- drawingElement.points
     } grid(point.row)(point.column) += delta
 
   override def toString = {
-    def renderRow(row: Array[Int]) = row.map(n ⇒ if (n == 0) ' ' else n.toString).mkString
+    def renderRow(row: Array[Int]) = row.map(n => if (n == 0) ' ' else n.toString).mkString
     grid.map(renderRow).mkString("\n")
   }
 

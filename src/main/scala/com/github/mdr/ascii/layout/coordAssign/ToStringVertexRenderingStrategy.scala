@@ -14,7 +14,7 @@ object ToStringVertexRenderingStrategy extends VertexRenderingStrategy[Any] {
 
   def getText(v: Any, allocatedSize: Dimension): List[String] = {
     val unpaddedLines =
-      splitLines(v.toString).take(allocatedSize.height).map { line ⇒ centerLine(allocatedSize, line) }
+      splitLines(v.toString).take(allocatedSize.height).map { line => centerLine(allocatedSize, line) }
     val verticalDiscrepancy = Math.max(0, allocatedSize.height - unpaddedLines.size)
     val verticalPadding = List.fill(verticalDiscrepancy / 2)("")
     verticalPadding ++ unpaddedLines ++ verticalPadding
@@ -22,8 +22,8 @@ object ToStringVertexRenderingStrategy extends VertexRenderingStrategy[Any] {
 
   private def splitLines(s: String): List[String] =
     s.split("(\r)?\n").toList match {
-      case Nil | List("") ⇒ Nil
-      case xs             ⇒ xs
+      case Nil | List("") => Nil
+      case xs             => xs
     }
 
   private def centerLine(allocatedSize: Dimension, line: String): String = {

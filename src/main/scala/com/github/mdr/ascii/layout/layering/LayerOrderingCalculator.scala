@@ -11,10 +11,10 @@ object LayerOrderingCalculator {
    */
   def reorder(layering: Layering): Layering = {
     var previousLayerOpt: Option[Layer] = None
-    val newLayers = layering.layers.map { currentLayer ⇒
+    val newLayers = layering.layers.map { currentLayer =>
       val updatedLayer = previousLayerOpt match {
-        case Some(previousLayer) ⇒ reorder(previousLayer, currentLayer, layering.edges)
-        case None                ⇒ currentLayer
+        case Some(previousLayer) => reorder(previousLayer, currentLayer, layering.edges)
+        case None                => currentLayer
       }
       previousLayerOpt = Some(updatedLayer)
       updatedLayer
@@ -27,13 +27,14 @@ object LayerOrderingCalculator {
    */
   private def reorder(layer1: Layer, layer2: Layer, edges: List[Edge]): Layer = {
     def barycenter(vertex: Vertex): Double = {
-      val inVertices = edges.collect { case Edge(v1, `vertex`) ⇒ v1 }
-      average(inVertices)(v ⇒ layer1.positionOf(v).toDouble)
+      val inVertices = edges.collect { case Edge(v1, `vertex`) => v1 }
+      average(inVertices)(v => layer1.positionOf(v).toDouble)
     }
+    implicit val order = Ordering.Double.TotalOrdering
     layer2.copy(vertices = layer2.vertices.sortBy(barycenter))
   }
 
-  private def average[T](items: Iterable[T])(f: T ⇒ Double): Double =
+  private def average[T](items: Iterable[T])(f: T => Double): Double =
     items.map(f).sum / items.size
 
 }

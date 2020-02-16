@@ -57,18 +57,18 @@ object Main {
   {
     val diagram = diagram1
 
-    for (box ← diagram.allBoxes)
+    for (box <- diagram.allBoxes)
       println(box)
 
     for {
-      box ← diagram.allBoxes.find(_.text == "A")
-      (edge, otherBox) ← box.connections()
-      label ← edge.label
+      box <- diagram.allBoxes.find(_.text == "A")
+      (edge, otherBox) <- box.connections()
+      label <- edge.label
     } println(box + " ==> " + label + " ==> " + otherBox)
   }
-  //  for (box ← diagram.allBoxes)
+  //  for (box <- diagram.allBoxes)
   //    println(box)
-  //  for (edge ← diagram.allEdges)
+  //  for (edge <- diagram.allEdges)
   //    println(edge)
 
 }

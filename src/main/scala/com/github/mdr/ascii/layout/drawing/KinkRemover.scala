@@ -28,9 +28,9 @@ object KinkRemover {
     var continue = true
     while (continue)
       removeKink(currentDrawing, edgeTracker) match {
-        case None ⇒
+        case None =>
           continue = false
-        case Some((oldEdge, updatedEdge)) ⇒
+        case Some((oldEdge, updatedEdge)) =>
           currentDrawing = currentDrawing.replaceElement(oldEdge, updatedEdge)
       }
     return currentDrawing
@@ -38,9 +38,9 @@ object KinkRemover {
 
   private def removeKink(drawing: Drawing, edgeTracker: EdgeTracker): Option[(EdgeDrawingElement, EdgeDrawingElement)] = {
     for {
-      edgeElement ← drawing.edgeElements
-      newEdgeElement ← removeKink(edgeElement, drawing, edgeTracker)
-    } return Some(edgeElement → newEdgeElement)
+      edgeElement <- drawing.edgeElements
+      newEdgeElement <- removeKink(edgeElement, drawing, edgeTracker)
+    } return Some(edgeElement -> newEdgeElement)
     None
   }
 
@@ -59,7 +59,7 @@ object KinkRemover {
       //                          │
       //                          .
       //                          .
-      case (segment1Opt, segment2 @ EdgeSegment(start, Down, middle), segment3 @ EdgeSegment(_, Left | Right, end), segment4Opt) ⇒
+      case (segment1Opt, segment2 @ EdgeSegment(start, Down, middle), segment3 @ EdgeSegment(_, Left | Right, end), segment4Opt) =>
         val alternativeMiddle = Point(start.row, end.column)
 
         segment1Opt.foreach(edgeTracker.removeHorizontalSegment)
@@ -67,10 +67,10 @@ object KinkRemover {
         edgeTracker.removeHorizontalSegment(segment3)
         segment4Opt.foreach(edgeTracker.removeVerticalSegment)
 
-        val newSegment1Opt = segment1Opt.map { segment1 ⇒
+        val newSegment1Opt = segment1Opt.map { segment1 =>
           EdgeSegment(segment1.start, segment1.direction, alternativeMiddle)
         }
-        val newSegment4Opt = segment4Opt.map { segment4 ⇒
+        val newSegment4Opt = segment4Opt.map { segment4 =>
           EdgeSegment(alternativeMiddle, segment4.direction, segment4.finish)
         }
         val collision = newSegment1Opt.exists(edgeTracker.collidesHorizontal) || newSegment4Opt.exists(edgeTracker.collidesVertical)
@@ -97,17 +97,17 @@ object KinkRemover {
       //  alternativeMiddle .............╰─end───────────...
       //                                      segment4
       //
-      case (segment1Opt, segment2 @ EdgeSegment(start, Left | Right, middle), segment3 @ EdgeSegment(_, Down, end), segment4Opt) ⇒
+      case (segment1Opt, segment2 @ EdgeSegment(start, Left | Right, middle), segment3 @ EdgeSegment(_, Down, end), segment4Opt) =>
         val alternativeMiddle = Point(end.row, start.column)
         segment1Opt.foreach(edgeTracker.removeVerticalSegment)
         edgeTracker.removeHorizontalSegment(segment2)
         edgeTracker.removeVerticalSegment(segment3)
         segment4Opt.foreach(edgeTracker.removeHorizontalSegment)
 
-        val newSegment1Opt = segment1Opt.map { segment1 ⇒
+        val newSegment1Opt = segment1Opt.map { segment1 =>
           EdgeSegment(segment1.start, segment1.direction, alternativeMiddle)
         }
-        val newSegment4Opt = segment4Opt.map { segment4 ⇒
+        val newSegment4Opt = segment4Opt.map { segment4 =>
           EdgeSegment(alternativeMiddle, segment4.direction, segment4.finish)
         }
         val collision = newSegment1Opt.exists(edgeTracker.collidesVertical) || newSegment4Opt.exists(edgeTracker.collidesHorizontal)
@@ -130,7 +130,7 @@ object KinkRemover {
    * left or right of the vertex.
    */
   private def checkVertexConnection(drawing: Drawing, end: Point, alternativeMiddle: Point, direction: Direction): Boolean = {
-    drawing.vertexElementAt(end.go(direction)).forall { vertex ⇒
+    drawing.vertexElementAt(end.go(direction)).forall { vertex =>
       val connectedToSameVertex = drawing.vertexElementAt(alternativeMiddle.go(direction)) == Some(vertex)
       val extremeLeftOfVertex = alternativeMiddle.column == vertex.region.leftColumn
       val extremeRightOfVertex = alternativeMiddle.column == vertex.region.rightColumn

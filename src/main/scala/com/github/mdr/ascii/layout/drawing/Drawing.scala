@@ -11,23 +11,23 @@ case class Drawing(elements: List[DrawingElement]) extends Transposable[Drawing]
   }
 
   private def maxPoint(element: DrawingElement): Point = element match {
-    case element: VertexDrawingElement ⇒ element.region.bottomRight
-    case element: EdgeDrawingElement   ⇒ element.bendPoints.reduce(_ maxRowCol _)
+    case element: VertexDrawingElement => element.region.bottomRight
+    case element: EdgeDrawingElement   => element.bendPoints.reduce(_ maxRowCol _)
   }
 
   def replaceElement(element: DrawingElement, replacement: DrawingElement) =
     copy(elements = replacement :: elements.filterNot(_ == element))
 
   def vertexElementAt(point: Point): Option[VertexDrawingElement] = elements.collectFirst {
-    case vde: VertexDrawingElement if vde.region contains point ⇒ vde
+    case vde: VertexDrawingElement if vde.region contains point => vde
   }
 
   def vertexElements: List[VertexDrawingElement] = elements.collect {
-    case vde: VertexDrawingElement ⇒ vde
+    case vde: VertexDrawingElement => vde
   }
 
   def edgeElements: List[EdgeDrawingElement] = elements.collect {
-    case ede: EdgeDrawingElement ⇒ ede
+    case ede: EdgeDrawingElement => ede
   }
 
   def transpose: Drawing = Drawing(elements.map(_.transpose))

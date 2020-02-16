@@ -314,8 +314,8 @@ class GraphDiagramParserTest extends FlatSpec with Matchers {
     diagram.allBoxes.size should be(39)
   }
 
-  private def checkEdges(diagram: Diagram, expectedEdges: (String, String)*) {
-    val edges = diagram.allEdges.map(e ⇒ text(e.box1) → text(e.box2))
+  private def checkEdges(diagram: Diagram, expectedEdges: (String, String)*): Unit = {
+    val edges = diagram.allEdges.map(e => text(e.box1) → text(e.box2))
     edges.toSet should equal(expectedEdges.toSet)
     Utils.multisetCompare(edges, expectedEdges.toList) should be(true)
   }

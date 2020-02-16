@@ -7,7 +7,7 @@ package com.github.mdr.ascii.layout.layering
  */
 case class Layering(layers: List[Layer], edges: List[Edge]) {
 
-  def edgesInto(layer: Layer): List[Edge] = edges.filter { e ⇒ layer.contains(e.finishVertex) }
+  def edgesInto(layer: Layer): List[Edge] = edges.filter { e => layer.contains(e.finishVertex) }
 
 }
 
